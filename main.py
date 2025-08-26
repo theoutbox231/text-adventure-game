@@ -4,6 +4,7 @@ health=100
 inventory = []
 Locations = ["town","shop","gas station"]
 gastank = 20
+inCombat = False
 # base item class for all inventory objects 
 
 class Item: 
@@ -43,8 +44,14 @@ gasStationLoot = [
     Item("lighter"),
     Item("first aid kit"),
     Item("water"),
-    Item("duct tape roll")
+    Item("duct tape roll"),
 
+]
+Townloot = [
+    Weapon("pocket knife",4,0),
+    Item("vaccine"),
+    Food("vitamans",10),
+    Weapon("metal bat",15,0),
 ]
 pistol=Weapon("m1911",15,6)
 juice=Drink("juicebox",15)
@@ -58,15 +65,15 @@ def welcome():
     print(f"hello {name}!")
     playerinput()
 def add__to__inventory(item):
-    inventory.append(Item)
+    inventory.append(item)
     print(f"{item} has been added to your inventory!")
 # Fuction to offer the player 3 random loot items and let them choose which one to do
-def offer_loot(loot_list): 
+def offer_loot(loot_list, loot_prompt): 
 # Randomly choose 3 diffrent items from the loot list
     options = random.sample(loot_list,3)
     
     # Show the player what they looked for
-    print("you rummage through shelves and find:")
+    print(loot_prompt)
     # Enumerate start at one instead of zero of for player-freindly numbering 
     for i, item in enumerate(options,1):
         print(f"{i}.{item}") # display options: 1. item, 2. item, etc.
@@ -84,8 +91,27 @@ def offer_loot(loot_list):
     for item in chosen_items: 
         print(f"- {item}")
         add__to__inventory(item)
+def combatEncounter():
+    print("you encounter an infected human")
+    print("what going do to handle this threating situation")
+    print("[1,mutilate the threat 2,run 3, 4,hide ]")
+    global inCombat 
+    inCombat = True  
+def encounter_zombie(chance_percent):
+    roll = random.uniform(0,100)
+    if (roll < chance_percent):
+        combatEncounter()
+def listWeaponsToUse():
+    weapons = [item for item in inventory if isinstance(item, Weapon)]
+    for i, weapon in enumerate(weapons,1):
+        print(f"{i}.{weapon.name}, {str(weapon.ammo)} + bullets {str(weapon.damage)} damage") # display options: 1. item, 2. item, etc.
+    choice = input ("choose the weapon you want to use (e.g. 1 or 2): ")
+    # selected_indices = [int(num.strip()) - 1 for num in choice.split() if num.strip().isdigit() and 1 <= int(num.strip())<= 3]
+    # chosen_items = [options[i] for i in selected_indices]
+
 def playerinput():
-    global location 
+    global location
+    global inCombat
     prompt = input()
     if prompt == "stats":
         print(f"Name: {name}")
@@ -97,11 +123,33 @@ def playerinput():
         print(f"you at {location}")
         print(f"all Locations:{Locations}")
     if prompt=="gas station":
+        encounter_zombie(25)
       
         location = "gas station"
         print("you are in a gas station")
-    if prompt=="loot" and location != "home":
+    if prompt == "town":
+        encounter_zombie(80)
+        location = "town"
+        print ("im in the town")
+    if prompt=="loot" and location == "gas station":
         print("looting")
-        offer_loot(gasStationLoot)
+        offer_loot(gasStationLoot,"you rummage through shelves and find:")
+    if prompt=="loot" and location == "town":
+        print("looting")
+        offer_loot(Townloot,"you rummage through homes to find:")
+    if prompt == "1" and inCombat: 
+        listWeaponsToUse()
+        inCombat = False
+    if prompt == "2" and inCombat:
+        print("you have outran the zombie")
+        inCombat = False
+    if prompt == "3" and inCombat:
+        print("you have hid from the zombie")
+        inCombat = False
+
+    if prompt =="help": 
+        print ("town, map, stats, loot,")
     playerinput()
+
+
 welcome()

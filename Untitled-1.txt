@@ -1,0 +1,25 @@
+
+<document html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="widith=device-width, initial-scale1.0" />
+<title>facts.gold</title>
+<link rel="stylesheet" href="./style.css"/>
+</head> 
+</body> 
+<div class="navbar"><h2>facts about gold</h2></div>
+<div class="wrapperfacts">
+    <p> 
+    welcome to the website here it can tell you about facts about gold 
+    your welcome here anytime.
+    </p>
+    <ul>
+<li> gold is from the ground and its weaker the silver,</li>
+<li> gold is more rare than silver gold,</li>
+<li>gold can also be melted as well</li>
+<li> gold can be made out od watches and bars too</li>
+</ul
+ style="border-top: 2px solid rgb(0,0,0,;) padding: 5px">
+        <img src="./picture of gold.jpg" alt="" />
+v> 
