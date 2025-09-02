@@ -54,9 +54,11 @@ Townloot = [
     Weapon("metal bat",15,0),
 ]
 pistol=Weapon("m1911",15,6)
+swissarmyknife = Weapon(" Swiss Army Knife",8,0)
 juice=Drink("juicebox",15)
 chocolate=Food("choclate bar",20)
 inventory.append(pistol)
+inventory.append(swissarmyknife)
 inventory.append(juice)
 location="home"
 def welcome():
@@ -101,13 +103,26 @@ def encounter_zombie(chance_percent):
     roll = random.uniform(0,100)
     if (roll < chance_percent):
         combatEncounter()
+def choose_weapon(weapons):
+    if not weapons: 
+        print("You have no weapons")
+        return None
+    print("choose a weapon to use:")
+    for i, weapon in enumerate(weapons,1):
+        print(f"{i}. {weapon}")
+    while True: 
+        choice = input("enter the number of the weapon you want to use:")
+        if choice.isdigit():
+            index = int(choice) - 1
+            if 0 <= index < len (weapons):
+                chosen_weapon =  weapons[index]
+                print(f"you have selected: {chosen_weapon}")
+                return chosen_weapon
 def listWeaponsToUse():
     weapons = [item for item in inventory if isinstance(item, Weapon)]
-    for i, weapon in enumerate(weapons,1):
-        print(f"{i}.{weapon.name}, {str(weapon.ammo)} + bullets {str(weapon.damage)} damage") # display options: 1. item, 2. item, etc.
-    choice = input ("choose the weapon you want to use (e.g. 1 or 2): ")
-    # selected_indices = [int(num.strip()) - 1 for num in choice.split() if num.strip().isdigit() and 1 <= int(num.strip())<= 3]
-    # chosen_items = [options[i] for i in selected_indices]
+    chosen = choose_weapon(weapons)
+    print(f"You eliminated the zombie the zombie with a {chosen}")
+    # chosen_item = [options[i] for i in selected_indices]
 
 def playerinput():
     global location
@@ -150,6 +165,7 @@ def playerinput():
     if prompt =="help": 
         print ("town, map, stats, loot,")
     playerinput()
+
 
 
 welcome()
